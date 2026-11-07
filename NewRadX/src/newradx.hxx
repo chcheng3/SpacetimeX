@@ -30,6 +30,42 @@ void NewRadX_Apply(const cGH *restrict const cctkGH,
       vJ_db_dz, vJ_dc_dx, vJ_dc_dy, vJ_dc_dz
 
 /**
+ * Store descriptors, not grid-function values. GF3D2 descriptors are safe to
+ * copy into the device lambda; do not instead capture a host pointer to a
+ * std::vector or other dynamically allocated host container.
+ */
+struct NewRadX_Field {
+  Loop::GF3D2<const CCTK_REAL> var;
+  Loop::GF3D2<CCTK_REAL> rhs;
+  CCTK_REAL var0;
+  CCTK_REAL v0;
+  CCTK_REAL radpower;
+};
+
+struct NewRadX_FieldList {
+  static constexpr std::size_t kMaxFields = 30;
+  alignas(NewRadX_Field) unsigned char storage[kMaxFields * sizeof(NewRadX_Field)];
+  int count = 0;
+
+  CCTK_HOST CCTK_DEVICE NewRadX_Field* data() {
+    return reinterpret_cast<NewRadX_Field*>(storage);
+  }
+  CCTK_HOST CCTK_DEVICE const NewRadX_Field* data() const {
+    return reinterpret_cast<const NewRadX_Field*>(storage);
+  }
+
+  void push_back(const NewRadX_Field& f) {
+    // Copy-construct a NewRadX_Field with placement new
+    new (&data()[count]) NewRadX_Field(f);
+    ++count;
+  }
+};
+
+
+void NewRadX_Apply(const cGH *restrict const cctkGH,
+		   const NewRadX_FieldList& fields);
+
+/**
  * @brief Applies radiative boundary condition to the RHS of a state variable
  * on multipatch grids. See above for original credits.
  *
