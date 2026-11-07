@@ -63,7 +63,7 @@ struct NewRadX_FieldList {
 
 
 void NewRadX_Apply(const cGH *restrict const cctkGH,
-		   const NewRadX_FieldList& fields);
+                   const NewRadX_FieldList& fields);
 
 /**
  * @brief Applies radiative boundary condition to the RHS of a state variable

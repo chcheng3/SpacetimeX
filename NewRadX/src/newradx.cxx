@@ -223,11 +223,11 @@ void NewRadX_Apply(const cGH *restrict const cctkGH,
 
 #pragma unroll
         for (int i=0; i<fields.count; ++i) {
-	  auto var      = fields.data()[i].var;
-	  auto rhs      = fields.data()[i].rhs;
-	  auto var0     = fields.data()[i].var0;
-	  auto v0       = fields.data()[i].v0;
-	  auto radpower = fields.data()[i].radpower;
+          auto var      = fields.data()[i].var;
+          auto rhs      = fields.data()[i].rhs;
+          auto var0     = fields.data()[i].var0;
+          auto v0       = fields.data()[i].v0;
+          auto radpower = fields.data()[i].radpower;
 
           // Find local wave speeds at radiative boundary point p.I
           const auto vx = v0 * p.x / r;
@@ -301,7 +301,7 @@ void NewRadX_Apply(const cGH *restrict const cctkGH,
             // Radiative rhs with extrapolated Coulomb correction
             rhs(p.I) += aux;
           }
-	}
+        }
       });
 }
 
