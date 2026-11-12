@@ -221,7 +221,6 @@ void NewRadX_Apply(const cGH *restrict const cctkGH,
         // coordinate radius at p.I
         const auto r = sqrt(pow2(p.x) + pow2(p.y) + pow2(p.z));
 
-#pragma unroll
         for (int i=0; i<fields.count; ++i) {
           auto var      = fields.data()[i].var;
           auto rhs      = fields.data()[i].rhs;
